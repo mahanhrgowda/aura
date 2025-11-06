@@ -2,7 +2,7 @@ import streamlit as st
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.colors as mcolors
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, date, time
 from io import BytesIO
 import random
 import hashlib
@@ -233,10 +233,10 @@ st.title("Aura Alchemy Simulator ✨🔮🌟")
 st.write("Enter your details to simulate your aura transformation! 🌈💫")
 
 name = st.text_input("Your Name 📛")
-birth_date = st.date_input("Birth Date 📅")
-birth_time = st.time_input("Birth Time ⏰")
-latitude = st.number_input("Birth Latitude (e.g., 37.77 for San Francisco) 🌍", -90.0, 90.0, 0.0)
-longitude = st.number_input("Birth Longitude (e.g., -122.41 for San Francisco) 🗺️", -180.0, 180.0, 0.0)
+birth_date = st.date_input("Birth Date 📅", min_value=date(1900, 1, 1), max_value=date(2100, 12, 31), value=date(1993, 7, 12))
+birth_time = st.time_input("Birth Time ⏰", value=time(12, 26), step=3600)
+latitude = st.number_input("Birth Latitude (positive for North, negative for South) 🌍", -90.0, 90.0, 13.32)
+longitude = st.number_input("Birth Longitude (positive for East, negative for West) 🗺️", -180.0, 180.0, 75.77)
 
 if name and birth_date:
     birth_datetime = datetime.combine(birth_date, birth_time)
@@ -258,6 +258,17 @@ if name and birth_date:
     st.subheader("Your Aura Visualization 🌈✨")
     gradient_img = create_gradient(all_colors)
     st.image(gradient_img, caption="Your alchemical aura gradient 🔮")
+    
+    # Rune meanings explanation 📜ᚱ
+    st.subheader("Your Runes and Meanings ᚱ📜✨")
+    if runes:
+        unique_runes = list(set(runes))  # Unique runes for cleaner display
+        st.write("Based on your name, here are the transmuted runes and their mystical meanings: 🔮")
+        for rune in unique_runes:
+            meaning = rune_meanings.get(rune, "Ancient mystery unfolds... 🔮")
+            st.write(f"**{rune}**: {meaning} 📜💫")
+    else:
+        st.write("Enter a name to reveal your runes and their meanings! 📛ᚱ")
     
     # Moon phase 🌙
     st.subheader("Moon Phase at Birth 🌕")
